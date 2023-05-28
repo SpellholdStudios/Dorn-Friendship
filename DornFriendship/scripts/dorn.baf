@@ -1,0 +1,478 @@
+///////////////////////////////////////
+///////////////// FIX /////////////////
+///////////////////////////////////////
+
+/* this block should be deleted if Beamdog fixes the problem with Global("OHD_KNOWS_DORN","LOCALS",0) being set to 1 upon adding the 1st quest journal entry */
+
+IF
+	Global("OHD_PLOT","GLOBAL",1)
+	Global("OHD_KNOWS_DORN","LOCALS",0)
+	InParty(Myself)
+	GlobalLT("OHD_JOURNAL_BEGIN","LOCALS",2)
+THEN
+	RESPONSE #100
+		SetGlobal("OHD_JOURNAL_BEGIN","LOCALS",2)
+		EraseJournalEntry(91090)  // I encountered an old acquaintance, the half-orc Dorn Il-Khan, lurking outside Athkatla's Temple of the Radiant Heart this <DAYNIGHTALL>. His intent was clearly sinister. Whatever he plans, I want nothing to do with it.
+		EraseJournalEntry(91091)  // I encountered a sinister half-orc named Dorn Il-Khan this <DAYNIGHTALL>, lurking round the Temple of the Radiant Heart. I know not what he has planned, and in truth I do not want to know.
+		AddJournalEntry(91092,INFO)  // I encountered Dorn Il-Khan this <DAYNIGHTALL>. The sinister half-orc was lurking round the Temple of the Radiant Heart, waiting for an opportunity to slay a priest named Bollard Firejaw. Dorn's power would make him a valuable ally—I believe I shall assist him in this endeavor.
+END
+
+///////////////////////////////////////
+//////////// TIMERED TALKS ////////////
+///////////////////////////////////////
+
+IF
+	InParty(Myself)
+	Global("L#DornFriendshipActive","GLOBAL",0)
+	GlobalLT("DornLovetalks","GLOBAL",14)
+	Global("DornRomanceActive","GLOBAL",3)
+	Global("OHD_dornsex","GLOBAL",0)
+THEN
+RESPONSE #100
+ 	  RealSetGlobalTimer("L#DornFriendTimer","GLOBAL",3600)
+		SetGlobal("L#DornFriendshipActive","GLOBAL",1)
+		SetGlobal("L#DornFriendTalk","GLOBAL",1)
+END
+
+IF
+  InParty(Myself)
+	OR(2)
+		Global("L#DornFriendshipActive","GLOBAL",1)
+		Global("L#DornFriendshipActive","GLOBAL",2)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	AreaType(DUNGEON)
+	!AreaCheck("OH5110")
+	!AreaCheck("OH5200")
+	RealGlobalTimerExpired("L#DornFriendTimer","GLOBAL")
+	Global("L#DornFriendItWasDungeon","GLOBAL",0)
+	OR(6)
+		Global("L#DornFriendTalk","GLOBAL",1)
+		Global("L#DornFriendTalk","GLOBAL",4)
+		Global("L#DornFriendTalk","GLOBAL",7)
+		Global("L#DornFriendTalk","GLOBAL",10)
+		Global("L#DornFriendTalk","GLOBAL",13)
+		Global("L#DornFriendTalk","GLOBAL",16)
+THEN
+	RESPONSE #100
+	  SetGlobal("L#DornFriendItWasDungeon","GLOBAL",1)
+END
+
+IF
+  InParty(Myself)
+	OR(2)
+		Global("L#DornFriendshipActive","GLOBAL",1)
+		Global("L#DornFriendshipActive","GLOBAL",2)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	!AreaType(DUNGEON)
+	!AreaCheck("OH5110")
+	!AreaCheck("OH5200")
+	RealGlobalTimerExpired("L#DornFriendTimer","GLOBAL")
+	Global("L#DornFriendItWasDungeon","GLOBAL",1)
+	OR(6)
+		Global("L#DornFriendTalk","GLOBAL",1)
+		Global("L#DornFriendTalk","GLOBAL",4)
+		Global("L#DornFriendTalk","GLOBAL",7)
+		Global("L#DornFriendTalk","GLOBAL",10)
+		Global("L#DornFriendTalk","GLOBAL",13)
+		Global("L#DornFriendTalk","GLOBAL",16)
+THEN
+	RESPONSE #100
+	  RealSetGlobalTimer("L#DornFriendTimer","GLOBAL",180)
+	  SetGlobal("L#DornFriendItWasDungeon","GLOBAL",0)
+END
+
+IF
+  InParty(Myself)
+	OR(2)
+		Global("L#DornFriendshipActive","GLOBAL",1)
+		Global("L#DornFriendshipActive","GLOBAL",2)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	!AreaType(DUNGEON)
+	!AreaCheck("OH5110")
+	!AreaCheck("OH5200")
+	RealGlobalTimerExpired("L#DornFriendTimer","GLOBAL")
+	OR(6)
+		Global("L#DornFriendTalk","GLOBAL",1)
+		Global("L#DornFriendTalk","GLOBAL",4)
+		Global("L#DornFriendTalk","GLOBAL",7)
+		Global("L#DornFriendTalk","GLOBAL",10)
+		Global("L#DornFriendTalk","GLOBAL",13)
+		Global("L#DornFriendTalk","GLOBAL",16)
+THEN
+	RESPONSE #100
+	  IncrementGlobal("L#DornFriendTalk","GLOBAL",1)
+END
+
+
+IF
+  InParty(Myself)
+	OR(2)
+		Global("L#DornFriendshipActive","GLOBAL",1)
+		Global("L#DornFriendshipActive","GLOBAL",2)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	!AreaType(DUNGEON)
+	!AreaCheck("OH5110")
+	!AreaCheck("OH5200")
+	OR(6)
+		Global("L#DornFriendTalk","GLOBAL",2)
+		Global("L#DornFriendTalk","GLOBAL",5)
+		Global("L#DornFriendTalk","GLOBAL",8)
+		Global("L#DornFriendTalk","GLOBAL",11)
+		Global("L#DornFriendTalk","GLOBAL",14)
+		Global("L#DornFriendTalk","GLOBAL",17)
+THEN
+	RESPONSE #100
+	  MoveToObject(Player1)
+		StartDialogueNoSet(Player1)
+END
+
+IF
+  InParty(Myself)
+	OR(2)
+		Global("L#DornFriendshipActive","GLOBAL",1)
+		Global("L#DornFriendshipActive","GLOBAL",2)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	!AreaType(DUNGEON)
+	OR(5)
+		Global("L#DornFriendTalk","GLOBAL",3)
+		Global("L#DornFriendTalk","GLOBAL",6)
+		Global("L#DornFriendTalk","GLOBAL",9)
+		Global("L#DornFriendTalk","GLOBAL",12)
+		Global("L#DornFriendTalk","GLOBAL",15)
+THEN
+	RESPONSE #100
+	  RealSetGlobalTimer("L#DornFriendTimer","GLOBAL",3600)
+	  IncrementGlobal("L#DornFriendTalk","GLOBAL",1)
+END
+
+IF
+InParty(Myself)
+Global("L#DornFriendTalk","GLOBAL",13)
+OR(2)
+ GlobalGT("AsylumPlot","GLOBAL",39)
+ InParty("IMOEN2")
+OR(2)
+ Global("L#DornFriendshipActive","GLOBAL",1)
+ Global("L#DornFriendshipActive","GLOBAL",2)
+THEN
+ RESPONSE #100
+ SetGlobal("L#DornFriendTalk","GLOBAL",15)
+END
+
+///////////////////////////////////////
+//////////// SCENERY TALKS ////////////
+///////////////////////////////////////
+
+//DEMON'S HEART
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	AreaCheck("AR0411")
+	PartyHasItem("misc6m")
+	Global("L#DornFriendshipHeart","GLOBAL",0)
+THEN
+RESPONSE #100
+SetGlobal("L#DornFriendshipHeart","GLOBAL",1)
+END
+
+IF
+Global("L#DornFriendshipHeart","GLOBAL",1)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+//DIED
+
+IF
+  Die()
+	Global("L#DornFriendshipDDied","GLOBAL",0)
+THEN
+RESPONSE #100
+SetGlobal("L#DornFriendshipDDied","GLOBAL",1)
+END
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	Global("L#DornFriendshipDDied","GLOBAL",1)
+	HPGT("DORN",0)
+THEN
+RESPONSE #100
+SetGlobal("L#DornFriendshipDDied","GLOBAL",2)
+END
+
+IF
+Global("L#DornFriendshipDDied","GLOBAL",2)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+//FORGOTTEN BELIEVERS
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	AreaCheck("AR0204")
+	Global("RiftGo","GLOBAL",1)
+	Global("L#DornFriendshipForBeli","GLOBAL",0)
+THEN
+RESPONSE #100
+SetGlobal("L#DornFriendshipForBeli","GLOBAL",1)
+END
+
+IF
+Global("L#DornFriendshipForBeli","GLOBAL",1)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+//DRUNK
+
+IF
+Global("L#DornFriendshipDrunk","GLOBAL",0)
+InParty(Myself)
+IfValidForPartyDialog(Player1)
+IfValidForPartyDialog(Myself)
+CheckStatGT("DORN",30,INTOXICATION)
+OR(16)
+AreaCheck("AR0021")
+AreaCheck("AR0313")
+AreaCheck("AR0314")
+AreaCheck("AR0406")
+AreaCheck("AR0509")
+AreaCheck("AR0513")
+AreaCheck("AR0514")
+AreaCheck("AR0515")
+AreaCheck("AR0522")
+AreaCheck("AR0704")
+AreaCheck("AR0709")
+AreaCheck("AR0712")
+AreaCheck("AR1105")
+AreaCheck("AR2010")
+AreaCheck("l#nd07")
+AreaCheck("L#ni05")
+See(Player1)
+CombatCounter(0)
+!See([ENEMY])
+THEN
+RESPONSE #100
+SetGlobal("L#DornFriendshipDrunk","GLOBAL",1)
+END
+
+IF
+Global("L#DornFriendshipDrunk","GLOBAL",1)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+//IMOEN
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	AreaCheck("AR1500")
+  Global("L#DornSaidImoenIsDead","GLOBAL",1)
+ THEN
+ RESPONSE #100
+  SetGlobal("L#DornSaidImoenIsDead","GLOBAL",2)
+END
+
+IF
+Global("L#DornSaidImoenIsDead","GLOBAL",2)
+ THEN
+ RESPONSE #100
+  StartDialogueNoSet(Player1)
+END
+
+IF
+Global("L#DornSaidImoenIsDead","GLOBAL",1)
+OR(5)
+ AreaCheck("AR1512")
+ AreaCheck("AR1513")
+ AreaCheck("AR1514")
+ AreaCheck("AR1515")
+ AreaCheck("AR1516")
+THEN
+RESPONSE #100
+SetGlobal("L#DornSaidImoenIsDead","GLOBAL",-1)
+END
+
+//SOUL REAVER
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	AreaCheck("AR2402")
+	OR(2)
+	 PartyHasItem("SW2HDEAT")
+	 PartyHasItem("SW2H08")
+	Global("L#DornFriendshipSR","GLOBAL",0)
+THEN
+RESPONSE #100
+SetGlobal("L#DornFriendshipSR","GLOBAL",1)
+END
+
+IF
+Global("L#DornFriendshipSR","GLOBAL",1)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+//SLAYER CHANGE
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	AreaCheck("AR1514")
+  Global("AsylumPlot","GLOBAL",44)
+  Global("L#DornAfterSlayerChat","GLOBAL",0)
+THEN
+RESPONSE #100
+ SetGlobal("L#DornAfterSlayerChat","GLOBAL",1)
+END
+
+IF
+Global("L#DornAfterSlayerChat","GLOBAL",1)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+//SLAYER-ANGER-UNDERDARK (FRIENDSHIP SUCCESFUL; IN DROW TAVERN)
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	AreaCheck("AR2202")
+  Global("L#DornFriendshipActive","GLOBAL",2)
+  Global("L#DornFiendshipUD","GLOBAL",0)
+THEN
+RESPONSE #100
+ SetGlobal("L#DornFiendshipUD","GLOBAL",1)
+END
+
+IF
+Global("L#DornFiendshipUD","GLOBAL",1)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+//WATCHER'S KEEP
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+	CombatCounter(0)
+	!See([ENEMY])
+	See(Player1)
+	AreaCheck("AR3000")
+	Range("TriggerPoint8",17)
+  Global("L#DornFiendshipWK","GLOBAL",0)
+THEN
+RESPONSE #100
+ SetGlobal("L#DornFiendshipWK","GLOBAL",1)
+END
+
+IF
+Global("L#DornFiendshipWK","GLOBAL",1)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END
+
+/////////////////////////////////////
+/////////// QUEST RESULTS ///////////
+/////////////////////////////////////
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+  Global("OHD_END_REWARD","GLOBAL",1)
+  Global("DornRomanceActive","GLOBAL",3)
+  Global("L#DornFriendQRes","GLOBAL",0)
+ THEN
+ RESPONSE #100
+  SetGlobalTimer("L#DornFriendQResTime","GLOBAL",TWO_DAYS)
+  SetGlobal("L#DornFriendQRes","GLOBAL",1)
+END
+
+IF
+  InParty(Myself)
+	IfValidForPartyDialog(Player1)
+	IfValidForPartyDialog(Myself)
+  Global("OHD_END_REWARD","GLOBAL",1)
+  Global("DornRomanceActive","GLOBAL",3)
+  Global("L#DornFriendQRes","GLOBAL",1)
+  GlobalTimerExpired("L#DornFriendQResTime","GLOBAL")
+ THEN
+ RESPONSE #100
+  SetGlobal("L#DornFriendQRes","GLOBAL",2)
+END
+
+IF
+Global("L#DornFriendQRes","GLOBAL",2)
+ THEN
+ RESPONSE #100
+	MoveToObject(Player1)
+  StartDialogueNoSet(Player1)
+END

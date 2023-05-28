@@ -1,0 +1,25 @@
+BACKUP ~DornFriendship/backup~
+AUTHOR ~Lava Del'Vortel~
+VERSION ~1.1~
+README ~DornFriendship/Dornfriendship-readme-%LANGUAGE%.html~ ~dornfriendship/dornfriendship-readme-english.html~
+
+AUTO_TRA ~DornFriendship/translations/%s~
+
+LANGUAGE ~English~
+         ~English~
+         ~DornFriendship/translations/english/setup.tra~
+
+BEGIN @1
+DESIGNATED 0 LABEL ~Dorn_friendship~
+
+/* CamDawg's custom IsValidForPartyDialogue() state. Thanks Cam! covers STATE_CONFUSED, STATE_FEEBLEMINDED, STATE_SILENCED, STATE_DEAD, STATE_ACID_DEATH, STATE_FLAME_DEATH, STATE_EXPLODING_DEATH, STATE_STONE_DEATH, STATE_FROZEN_DEATH, STATE_HELPLESS, STATE_STUNNED, STATE_PANIC, STATE_BERSERK, STATE_SLEEPING */
+   
+APPEND ~STATE.IDS~ ~0x80101FEF CD_STATE_NOTVALID~ UNLESS ~CD_STATE_NOTVALID~
+
+// Compiling dialogue & scripts SOA
+COMPILE ~dornfriendship/dialogue/dornj.d~
+EXTEND_TOP ~dorn.bcs~ ~dornfriendship/scripts/dorn.baf~
+
+// Compiling dialogue & scripts TOB
+COMPILE ~dornfriendship/dialogue/dorn25j.d~
+EXTEND_TOP ~dorn25.bcs~ ~dornfriendship/scripts/dorn25.baf~
